@@ -23,30 +23,29 @@ def open_sites():
     window_width = screen_width // 3
     window_height = screen_height
 
-    # Cria as janelas
-    # chrome_path = "C:/Program Files/Google/Chrome/Application/chrome.exe %s --new-window"
+    thread1 = threading.Thread(target=setup_driver, args=(tiktok_url, 0, window_width, window_height))
+    thread2 = threading.Thread(target=setup_driver, args=(kwai_url, window_width, window_width, window_height))
+    thread3 = threading.Thread(target=setup_driver,
+                               args=(youtube_shorts_url, window_width * 2, window_width, window_height))
+
+    # Inicia as threads
+    thread1.start()
+    thread2.start()
+    thread3.start()
+
+    # Aguarda todas as threads terminarem
+    thread1.join()
+    thread2.join()
+    thread3.join()
+
+
+def setup_driver(url, position_x, window_width, window_height):
     chrome_options = Options()
     chrome_options.add_experimental_option("detach", True)
-    driver1 = webdriver.Chrome(options=chrome_options)
-    driver2 = webdriver.Chrome(options=chrome_options)
-    driver3 = webdriver.Chrome(options=chrome_options)
-
-    # Abre os links
-    driver1.get(tiktok_url)
-    driver2.get(kwai_url)
-    driver3.get(youtube_shorts_url)
-
-    # Configura cada janela
-    driver1.set_window_size(window_width, window_height)
-    driver1.set_window_position(0, 0)
-
-    driver2.set_window_size(window_width, window_height)
-    driver2.set_window_position(window_width, 0)
-
-    driver3.set_window_size(window_width, window_height)
-    driver3.set_window_position(window_width * 2, 0)
-
-
+    driver = webdriver.Chrome(options=chrome_options)
+    driver.get(url)
+    driver.set_window_size(window_width, window_height)
+    driver.set_window_position(position_x, 0)
 
 # Criar janela principal
 window = tkinter.Tk()
