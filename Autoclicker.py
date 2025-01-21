@@ -1,5 +1,6 @@
-from selenium import webdriver
 import tkinter
+import threading
+from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 # TODO
@@ -23,7 +24,7 @@ def open_sites():
     window_height = screen_height
 
     # Cria as janelas
-    chrome_path = "C:/Program Files/Google/Chrome/Application/chrome.exe %s --new-window"
+    # chrome_path = "C:/Program Files/Google/Chrome/Application/chrome.exe %s --new-window"
     chrome_options = Options()
     chrome_options.add_experimental_option("detach", True)
     driver1 = webdriver.Chrome(options=chrome_options)
@@ -44,3 +45,19 @@ def open_sites():
 
     driver3.set_window_size(window_width, window_height)
     driver3.set_window_position(window_width * 2, 0)
+
+
+
+# Criar janela principal
+window = tkinter.Tk()
+window.title("Ramos Autoclicker")
+window.geometry("500x500")
+window.configure(bg='#bdb9b9')
+
+# Criar os botões
+button = tkinter.Button(window, text="ABRIR SITES", command=open_sites)
+button.pack(side = "top", pady = 25)
+
+# Loop principal
+window.mainloop()
+
