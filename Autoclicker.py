@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 class BrowserManager:
 
     def __init__(self):
+        self.drivers = []
 
     def open_sites(self):
 
@@ -37,9 +38,9 @@ class BrowserManager:
         thread3.start()
 
         # Aguarda todas as threads terminarem
-        thread1.join()
-        thread2.join()
-        thread3.join()
+        # thread1.join()
+        # thread2.join()
+        # thread3.join()
 
 
     def setup_driver(self,url, position_x, window_width, window_height):
@@ -49,6 +50,16 @@ class BrowserManager:
         driver.get(url)
         driver.set_window_size(window_width, window_height)
         driver.set_window_position(position_x, 0)
+        self.drivers.append(driver)
+
+    def close_all(self):
+        try:
+            for driver in self.drivers:
+                driver.quit()
+            self.drivers.clear()
+            print("Todas as janelas foram fechadas com sucesso!")
+        except Exception as e:
+            print(f"Erro ao fechar as janelas: {e}")
 
 browser_manager = BrowserManager()
 
@@ -61,6 +72,9 @@ window.configure(bg='#bdb9b9')
 # Criar os botões
 button = tkinter.Button(window, text="ABRIR SITES", command=browser_manager.open_sites)
 button.pack(side = "top", pady = 25)
+
+button2 = tkinter.Button(window, text="FECHAR NAVEGADOR", command=browser_manager.close_all)
+button2.pack(side = "top", pady = 10)
 
 # Loop principal
 window.mainloop()
