@@ -1,39 +1,46 @@
-import webbrowser
-import threading
-import tkinter
 from selenium import webdriver
+import tkinter
+from selenium.webdriver.chrome.options import Options
 
-def open_urls():
-    tiktokUrl = "www.tiktok.com"
-    kwaiUrl = "www.kwai.com"
-    youtubeShortsUrl = "www.youtube.com/shorts"
+# TODO
+# - Paralelizar a abertura de janelas
 
-    chrome_path = "C:/Program Files/Google/Chrome/Application/chrome.exe %s --new-window"
-    browser = webbrowser.get(chrome_path)
+def open_sites():
 
-    urls = [tiktokUrl, kwaiUrl, youtubeShortsUrl]
-    threads = []
+    # links
+    tiktok_url = "https://www.tiktok.com"
+    kwai_url = "https://www.kwai.com"
+    youtube_shorts_url = "https://www.youtube.com/shorts"
 
-    for url in urls:
-        t = threading.Thread(target=open_url, args=(url, browser))
-        threads.append(t)
-        t.start()
-
-    for t in threads:
-        t.join()
-
-def open_url(url, browser):
-    browser.open(url)
-
-def set_resolution_and_position():
-    # Obtém resolução da tela
+    # Resolução da tela
     root = tkinter.Tk()
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     root.destroy()
 
-    # Calcula dimensões desejadas
+    # Dimensões das janelas
     window_width = screen_width // 3
     window_height = screen_height
 
-open_urls()
+    # Cria as janelas
+    chrome_path = "C:/Program Files/Google/Chrome/Application/chrome.exe %s --new-window"
+    chrome_options = Options()
+    chrome_options.add_experimental_option("detach", True)
+    driver1 = webdriver.Chrome(options=chrome_options)
+    driver2 = webdriver.Chrome(options=chrome_options)
+    driver3 = webdriver.Chrome(options=chrome_options)
+
+    # Abre os links
+    driver1.get(tiktok_url)
+    driver2.get(kwai_url)
+    driver3.get(youtube_shorts_url)
+
+    # Configura cada janela
+    driver1.set_window_size(window_width, window_height)
+    driver1.set_window_position(0, 0)
+
+    driver2.set_window_size(window_width, window_height)
+    driver2.set_window_position(window_width, 0)
+
+    driver3.set_window_size(window_width, window_height)
+    driver3.set_window_position(window_width * 2, 0)
