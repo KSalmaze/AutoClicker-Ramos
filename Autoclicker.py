@@ -82,6 +82,10 @@ button.pack(side = "top", pady = 25)
 button2 = tkinter.Button(window, text="FECHAR NAVEGADOR", command=browser_manager.close_all)
 button2.pack(side = "top", pady = 10)
 
+text = tkinter.Label(window, text="Desenvolvido por Salmaze - github.com/KSalmaze")
+text.configure(bg='#bdb9b9')
+text.pack(side = "bottom")
+
 # Loop principal
 window.mainloop()
 
