@@ -52,14 +52,20 @@ class BrowserManager:
         driver.set_window_position(position_x, 0)
         self.drivers.append(driver)
 
-    def close_all(self):
+    def close_driver(self, driver):
         try:
-            for driver in self.drivers:
-                driver.quit()
-            self.drivers.clear()
-            print("Todas as janelas foram fechadas com sucesso!")
+            driver.quit()
+            print(f"Janela fechada com sucesso!")
         except Exception as e:
-            print(f"Erro ao fechar as janelas: {e}")
+            print(f"Erro ao fechar janela: {e}")
+
+    def close_all(self):
+
+        for driver in self.drivers:
+            thread = threading.Thread(target=self.close_driver, args=(driver,))
+            thread.start()
+
+        self.drivers.clear()
 
 browser_manager = BrowserManager()
 
