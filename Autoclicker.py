@@ -1,10 +1,14 @@
 import tkinter
 import threading
+from random import random
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 # TODO
-# - Paralelizar a abertura de janelas
+# - Gerar tempo baseado em 3 grupos
+# - Gerar delay entre clicks
+# - Implementar variação pequenas de posição
 
 class BrowserManager:
 
@@ -66,6 +70,21 @@ class BrowserManager:
             thread.start()
 
         self.drivers.clear()
+
+def random_delay():
+
+    grupo1_min = 0.5
+    grupo1_max = 2
+
+    grupo2_min = 10
+    grupo2_max = 25
+
+    grupo3_min = 40
+    grupo3_max = 80
+
+    # sortear grupo
+    # depois um valor no intervalo
+    # retornar o valor
 
 browser_manager = BrowserManager()
 
