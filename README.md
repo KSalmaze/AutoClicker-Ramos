@@ -1,2 +1,2 @@
 # AutoCliker-Ramos
- Um auto clicker para uma amigo
+ Um auto clicker para um amigo
