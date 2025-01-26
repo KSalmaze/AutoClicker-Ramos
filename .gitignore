@@ -1,2 +1,5 @@
 
 /.idea
+/build
+Autoclicker.spec
+dist/Autoclicker.exe
