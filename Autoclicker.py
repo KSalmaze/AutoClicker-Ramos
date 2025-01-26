@@ -83,6 +83,7 @@ class ClickManager:
         self.click_positions = []
         self.is_recording = False
         self.listener = None
+        self.is_clicking = False
 
     def on_click(self, x, y, button, pressed):
         if pressed and self.is_recording and len(self.click_positions) < 3:
@@ -91,14 +92,13 @@ class ClickManager:
 
             if len(self.click_positions) == 3:
                 self.stop_recording()
-                return False  # Para o listener após 3 clicks
+                return False
 
     def record_clicks(self):
         print("Gravando próximos 3 clicks... Pressione ESC para cancelar.")
         self.click_positions = []
         self.is_recording = True
 
-        # Inicia o listener de mouse
         with mouse.Listener(on_click=self.on_click) as listener:
             self.listener = listener
             listener.join()
@@ -109,23 +109,29 @@ class ClickManager:
         if self.listener:
             self.listener.stop()
 
-    def execute_clicks(self):
+    def toggle_clicking(self):
+        self.is_clicking = not self.is_clicking
+        if self.is_clicking:
+            threading.Thread(target=self.click_loop).start()
+        print("Auto Clicker:", "Ligado" if self.is_clicking else "Desligado")
+
+    def click_loop(self):
         if not self.click_positions or len(self.click_positions) < 3:
             print("Nenhuma sequência de clicks gravada!")
+            self.is_clicking = False
             return
 
-        print("Executando clicks...")
-        for pos in self.click_positions:
-            pyautogui.click(pos[0] + random_position(), pos[1] + random_position())
+        print("Iniciando sequência de clicks...")
+        while self.is_clicking:
             time.sleep(random_delay())
-        print("Sequência de clicks concluída!")
+            for pos in self.click_positions:
+                if not self.is_clicking:
+                    break
+                pyautogui.click(pos[0] + random_position(), pos[1] + random_position())
 
-
-
-def wait_for_f8(click_manager):
-    click_manager.
-    print("Aguardando tecla F8...")
-    keyboard.wait('f8')
+    def start_listener(self):
+        keyboard.on_press_key('F8', lambda _: self.toggle_clicking())
+        print("Pressione F8 para iniciar/parar a sequência de clicks")
 
 def random_position():
     return random.randint(-4, 4)
@@ -156,6 +162,7 @@ def random_delay():
 
 browser_manager = BrowserManager()
 click_manager = ClickManager()
+click_manager.start_listener()
 
 # Criar janela principal
 window = tkinter.Tk()
@@ -170,15 +177,15 @@ button.pack(side = "top", pady = 25)
 button2 = tkinter.Button(window, text="FECHAR NAVEGADOR", command=browser_manager.close_all)
 button2.pack(side = "top", pady = 10)
 
-btn_record = tkinter.Button(window, text="Gravar Clicks", command=click_manager.record_clicks)
-btn_record.pack(side="bottom", pady=40)
-
-btn_record = tkinter.Button(window, text="Iniciar Clicks", command=click_manager.execute_clicks)
-btn_record.pack(side="bottom", pady=10)
-
 text = tkinter.Label(window, text="Desenvolvido por Salmaze - github.com/KSalmaze")
 text.configure(bg='#bdb9b9')
 text.pack(side = "bottom")
+
+btn_record = tkinter.Button(window, text="Gravar Clicks", command=click_manager.record_clicks)
+btn_record.pack(side="bottom", pady=40)
+
+btn_record = tkinter.Button(window, text="Iniciar Clicks", command=click_manager.toggle_clicking)
+btn_record.pack(side="bottom", pady=10)
 
 # Loop principal
 window.mainloop()
