@@ -21,9 +21,9 @@ class BrowserManager:
     def open_sites(self):
 
         # links
-        tiktok_url = "https://www.tiktok.com"
-        kwai_url = "https://www.kwai.com"
-        youtube_shorts_url = "https://www.youtube.com/shorts"
+        utl1 = ""
+        url2 = ""
+        url3 = ""
 
         # Resolução da tela
         root = tkinter.Tk()
@@ -37,9 +37,9 @@ class BrowserManager:
         window_height = screen_height
         print(window_height)
 
-        thread1 = threading.Thread(target=self.setup_driver, args=(tiktok_url, 0, window_width, window_height))
+        thread1 = threading.Thread(target=self.setup_driver, args=(utl1, 0, window_width, window_height))
         thread2 = threading.Thread(target=self.setup_driver, args=(kwai_url, window_width, window_width, window_height))
-        thread3 = threading.Thread(target=self.setup_driver, args=(youtube_shorts_url, window_width * 2, window_width, window_height))
+        thread3 = threading.Thread(target=self.setup_driver, args=(url3, window_width * 2, window_width, window_height))
 
         # Inicia as threads
         thread1.start()
